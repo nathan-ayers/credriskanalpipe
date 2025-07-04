@@ -1,91 +1,112 @@
-Local Financial Data Pipeline
+# Local Financial Data Pipeline
 
-An end-to-end, zero‑cost project showcasing data engineering, analytics, and modeling on financial data.
+An end-to-end, zero‑cost project showcasing data engineering, analytics, and modeling on financial data. fileciteturn0file0
 
-Project Overview:
+---
 
-This pipeline ingests raw financial datasets (bank stock prices, loan data, macro indicators), transforms and stores them locally in DuckDB, runs analytics and a basic credit‑risk model, and serves results via an interactive Streamlit dashboard. Everything runs on your laptop with no cloud costs.
+## Project Summary
 
-Value & Industry Relevance
+This Local Financial Data Pipeline acquires three core datasets: detailed loan-level records (loan amounts, terms, grades, borrower profiles) from Lending Club; daily bank stock prices (OHLC) for major institutions (JPM, BAC, C, WFC, GS); and macroeconomic indicators (unemployment, GDP growth, CPI) via the FRED API. It ingests and archives raw files, cleans and converts them to efficient Parquet format, and loads them into DuckDB for SQL-based transformations with dbt, building a star-schema warehouse. Batch (Spark) and real-time (Kafka + Flink) processes compute key metrics—default rates by credit grade, rolling volatility, Sharpe ratios, and macro correlations—and train a baseline default-prediction model. Finally, a Streamlit dashboard visualizes KPIs, time-series analyses, and model insights.
 
-Mirrors real‑world banking workflows: credit risk, market analysis, macro correlations.
+By project end, you will have a fully automated, reproducible pipeline that mimics enterprise-grade banking analytics: from raw ingestion to actionable insights. This empowers financial organizations to monitor portfolio risk in near real time, evaluate market exposures, and support data-driven lending or investment decisions—all without incurring cloud costs.
 
-Demonstrates modern data‑ops best practices: Airflow/cron scheduling, dbt models, CI/CD tests.
+---
 
-Highlights skills in SQL, Python, dbt, Docker, and visualization tools.
+## Technology Stack & Roles
 
-Key Features:
+- **Python**: Orchestrates data ingestion (`requests`) and transformation (`pandas`), providing scripting flexibility and rapid prototyping.
+- **Apache Kafka**: Distributed message broker for ingesting real-time financial and macroeconomic streams.
+- **Apache Flink**: Stream processing engine for continuous analytics on live data.
+- **Apache Spark**: Distributed compute platform for scalable ETL, batch processing, and ML workloads.
+- **DuckDB**: Zero-config, high-performance SQL engine acting as the local data warehouse for ad-hoc analytics.
+- **Parquet**: Columnar storage format in `data/staging`—reduces file size and accelerates read performance.
+- **dbt**: SQL-based transformations, testing, and documentation—converts raw tables into a clean star schema with data lineage and automated tests.
+- **Streamlit**: Builds an interactive web dashboard for KPI cards and visualizations, enabling stakeholders to explore metrics and predictions in real time.
+- **Airflow / Cron & Makefile**: Orchestrates and schedules all pipeline steps—from ingestion to dashboard refresh.
+- **GitHub Actions**: CI/CD that runs dbt tests and Python unit tests on every push, ensuring code reliability.
 
-Data Engineering: Automated ingestion of daily stock prices, Lending Club loans CSVs, and FRED macro data.
+---
 
-Local Storage: DuckDB as a self‑contained warehouse; Parquet staging for performance.
+## Key Features
 
-Transformations: dbt models with tests, docs, and a star schema (dimensions & facts).
+- **Data Engineering**: Automated ingestion of lending, market, and macro data.
+- **Local Storage**: DuckDB acts as a self‑contained warehouse; Parquet staging for performance.
+- **Transformations**: dbt models with tests, docs, and a star schema (dimensions & facts).
+- **Analytics**: SQL & Python scripts compute default rates, volatility, Sharpe ratios, and correlation matrices.
+- **Modeling**: Baseline logistic regression for default prediction with performance metrics (ROC/AUC).
+- **Dashboard**: Streamlit app delivering KPI cards, interactive time-series charts, and model threshold explorer.
+- **Real-time & Batch Processing**: Kafka + Flink for streaming analytics; Spark for scalable ETL and batch jobs.
+- **Automation**: Airflow (Docker Compose) or Cron + Makefile schedules end-to-end pipeline runs.
+- **CI/CD**: GitHub Actions to validate code quality and data tests on every push.
 
-Analytics: SQL and Python scripts computing volatility, Sharpe ratios, default rates, and macro correlations.
+---
 
-Modeling: Baseline logistic regression for default prediction with performance metrics (ROC/AUC).
+## Architecture Diagram
 
-Dashboard: Streamlit app with KPI cards, interactive time‑series, drill‑downs, and model threshold explorer.
-
-Automation: Airflow (Docker) or Cron + Makefile schedules every step end-to-end.
-
-CI/CD: GitHub Actions to run dbt tests and Python unit tests on every push.
-
-Architecture Diagram
-
+```text
  ┌───────────┐     fetch & parquetize    ┌───────────┐
  │ Raw Data  │ ────────────────────────▶ │ staging/  │
- │(CSV, API) │                           │(Parquet)  │
- └───────────┘                           └───────────┘
+ │ (CSV, API)│                          │ (Parquet) │
+ └───────────┘                          └───────────┘
       │                                      │
       │                                      │
       ▼                                      ▼
- ┌───────────┐      dbt models & tests    ┌─────────────────┐
- │ DuckDB    │ ◀────────────────────────  │ dbt/            │
- │ warehouse │                            │ models/         │
- └───────────┘                            └─────────────────┘
+ ┌───────────┐      dbt models & tests    ┌───────────┐
+ │ DuckDB    │ ◀──────────────────────── │ dbt/      │
+ │ warehouse │                          │ models/   │
+ └───────────┘                          └───────────┘
       │                                      │
       │ Python & SQL analytics              │
       ▼                                      │
- ┌───────────┐      Streamlit UI     ┌─────────────────┐
- │ Notebooks │ ────────────────────▶ │ streamlit_app/  │
- └───────────┘                       └─────────────────┘
+ ┌───────────┐      Streamlit UI     ┌───────────┐
+ │ Notebooks │ ────────────────────▶ │ streamlit_app/ │
+ └───────────┘                       └───────────┘
       ▲                                      │
       │ CI/CD (GitHub Actions)               │
       └──────────────────────────────────────┘
+```
 
-Repository Structure
+---
 
+## Repository Structure
+
+```text
 project/
 ├─ data/
-│  ├─ raw/            # downloaded CSVs & JSON
-│  ├─ staging/        # Parquet files
-│  └─ warehouse.duckdb
-├─ airflow/           # Docker Compose for Airflow DAGs
-├─ dbt/               # dbt project (models, tests, docs)
-├─ notebooks/         # EDA & modeling notebooks
-├─ streamlit_app/     # Streamlit dashboard code
-├─ scripts/           # ingestion & parquetize scripts
-├─ docker-compose.yml # Airflow, DuckDB, MinIO/Postgres optional
-├─ Makefile           # cron-friendly tasks
-└─ README.md          # this file
+│  ├─ raw/             # Raw CSVs & JSON
+│  ├─ staging/         # Parquet files
+│  └─ warehouse.duckdb # DuckDB warehouse file
+├─ kafka/              # Kafka producer & consumer code
+├─ spark_jobs/         # PySpark batch ETL scripts
+├─ flink_jobs/         # Flink streaming jobs
+├─ airflow/            # Docker Compose & DAGs for Airflow
+├─ dbt/                # dbt project (models, tests, docs)
+├─ notebooks/          # EDA & modeling notebooks
+├─ streamlit_app/      # Streamlit dashboard code
+├─ scripts/            # Ingestion & parquetize scripts
+├─ docker-compose.yml  # Services: Kafka, Zookeeper, Spark, Flink, Airflow
+├─ Makefile            # Cron-friendly command shortcuts
+├─ requirements.txt    # Python dependencies
+└─ README.md           # This file
+```
 
-What each folder/file is for
-Path	Purpose
-data/raw/	Store the original, untouched CSVs and JSON files you download each day. You never edit these—so you always have a “ground truth” copy to fall back on if something breaks.
-data/staging/	After cleaning/parquetizing, your scripts write to here. Parquet files live here for super-fast reads by DuckDB or other tools.
-scripts/	Python (or bash) ingestion & cleaning scripts. For example:
+---
 
-fetch_raw.py: downloads Lending Club, yfinance, FRED data
+## Folder Descriptions
 
-parquetize.py: converts raw CSV → Parquet, applies simple cleaning rules |
-| dbt/models/ | All your SQL transformation logic lives here. dbt will pick up .sql files and build your star schema (dimensions & facts). You’ll also add schema.yml tests in the parent dbt/. |
-| notebooks/ | Interactive Jupyter notebooks for EDA, feature engineering, and building your baseline credit-risk model in Python. |
-| streamlit_app/ | The code for your Streamlit dashboard: layouts, charts, KPI cards, and the model threshold explorer. |
-| airflow/ | Docker Compose files and DAG definitions if you choose Airflow. This lives entirely locally, so you can run docker-compose up and watch your pipeline run. |
-| tests/ | Unit tests for your Python code (e.g. data-validation functions) and any dbt test configurations beyond the auto-generated ones. |
-| docs/ | Any hand-drawn diagrams (e.g. PNG/SVG architecture diagram), export of dbt docs, or extra markdown guides for modules. |
-| .gitignore | Lists files/folders Git should ignore (e.g. data/raw/, virtual environments, *.pyc). |
-| Makefile | Defines shortcuts like make ingest, make transform, and make dashboard so you can run the whole pipeline with a single command (and cron later). |
-| README.md | The high-level overview you just created. |
+| Path                  | Purpose                                                                                                                                     |
+|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `data/raw/`           | Store original, untouched data files downloaded daily—your “ground truth” copy.                                                              |
+| `data/staging/`       | Store cleaned, Parquet-converted files for performance.                                                                                     |
+| `kafka/`              | Kafka producer & consumer scripts to ingest and process real-time streams.                                                                  |
+| `spark_jobs/`         | Batch ETL and analytics scripts leveraging Spark for distributed compute.                                                                     |
+| `flink_jobs/`         | Stream processing jobs using Flink for continuous analytics.                                                                                 |
+| `airflow/`            | Configuration for orchestrating pipeline via Airflow (Docker Compose + DAGs).                                                                |
+| `dbt/`                | SQL transformation logic, tests, and documentation for building a star schema data warehouse.                                                 |
+| `notebooks/`          | Jupyter notebooks for exploratory data analysis and model development.                                                                       |
+| `streamlit_app/`      | Source code for the interactive Streamlit dashboard.                                                                                         |
+| `scripts/`            | Python scripts for initial data ingestion (`fetch_raw.py`) and conversion (`parquetize.py`).                                                  |
+| `.gitignore`          | Lists files and folders Git ignores (e.g., `data/raw/`, virtual environments, compiled files).                                               |
+| `Makefile`            | Defines shortcuts like `make ingest`, `make transform`, and `make dashboard`—enabling cron-friendly automation.                             |
+| `docker-compose.yml`  | Configuration for spinning up local Kafka, Zookeeper, Spark, Flink, and Airflow services.                                                    |
+| `requirements.txt`    | Python dependencies (e.g., `requests`, `pandas`, `confluent-kafka`, `pyspark`, `apache-flink`, `duckdb`, `dbt`, `streamlit`).|
