@@ -22,7 +22,7 @@ By project end, you will have a fully automated, reproducible pipeline that mimi
 - **Parquet**: Columnar storage format in `data/staging`—reduces file size and accelerates read performance.
 - **dbt**: SQL-based transformations, testing, and documentation—converts raw tables into a clean star schema with data lineage and automated tests.
 - **Streamlit**: Builds an interactive web dashboard for KPI cards and visualizations, enabling stakeholders to explore metrics and predictions in real time.
-- **Airflow / Cron & Makefile**: Orchestrates and schedules all pipeline steps—from ingestion to dashboard refresh.
+- **Airflow (DAGs)**: Orchestrates and schedules all pipeline steps via Airflow DAGs (Docker Compose), replacing any cron/Makefile workflows.
 - **GitHub Actions**: CI/CD that runs dbt tests and Python unit tests on every push, ensuring code reliability.
 
 ---
@@ -36,7 +36,7 @@ By project end, you will have a fully automated, reproducible pipeline that mimi
 - **Modeling**: Baseline logistic regression for default prediction with performance metrics (ROC/AUC).
 - **Dashboard**: Streamlit app delivering KPI cards, interactive time-series charts, and model threshold explorer.
 - **Real-time & Batch Processing**: Kafka + Flink for streaming analytics; Spark for scalable ETL and batch jobs.
-- **Automation**: Airflow (Docker Compose) or Cron + Makefile schedules end-to-end pipeline runs.
+- **Automation**: Airflow DAGs (Docker Compose) schedule your end-to-end pipeline runs.
 - **CI/CD**: GitHub Actions to validate code quality and data tests on every push.
 
 ---
@@ -46,21 +46,21 @@ By project end, you will have a fully automated, reproducible pipeline that mimi
 ```text
  ┌───────────┐     fetch & parquetize    ┌───────────┐
  │ Raw Data  │ ────────────────────────▶ │ staging/  │
- │ (CSV, API)│                          │ (Parquet) │
- └───────────┘                          └───────────┘
+ │ (CSV, API)│                           │ (Parquet) │
+ └───────────┘                           └───────────┘
       │                                      │
       │                                      │
       ▼                                      ▼
- ┌───────────┐      dbt models & tests    ┌───────────┐
- │ DuckDB    │ ◀──────────────────────── │ dbt/      │
+ ┌───────────┐      dbt models & tests  ┌───────────┐
+ │ DuckDB    │ ◀────────────────────────│ dbt/      │
  │ warehouse │                          │ models/   │
  └───────────┘                          └───────────┘
-      │                                      │
+      │                                     │
       │ Python & SQL analytics              │
-      ▼                                      │
- ┌───────────┐      Streamlit UI     ┌───────────┐
+      ▼                                     │
+ ┌───────────┐      Streamlit UI     ┌────────────────┐
  │ Notebooks │ ────────────────────▶ │ streamlit_app/ │
- └───────────┘                       └───────────┘
+ └───────────┘                       └────────────────┘
       ▲                                      │
       │ CI/CD (GitHub Actions)               │
       └──────────────────────────────────────┘
@@ -110,3 +110,8 @@ project/
 | `Makefile`            | Defines shortcuts like `make ingest`, `make transform`, and `make dashboard`—enabling cron-friendly automation.                             |
 | `docker-compose.yml`  | Configuration for spinning up local Kafka, Zookeeper, Spark, Flink, and Airflow services.                                                    |
 | `requirements.txt`    | Python dependencies (e.g., `requests`, `pandas`, `confluent-kafka`, `pyspark`, `apache-flink`, `duckdb`, `dbt`, `streamlit`).|
+
+
+ENV variables:
+
+You'll need to grab an API key from: https://fredaccount.stlouisfed.org/ and 
