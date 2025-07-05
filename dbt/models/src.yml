@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: parquet     # you can call this anything; it groups your Parquet files
+    database: "{{ target.database }}"   # DuckDB “database” is your warehouse file
+    schema: "{{ target.schema }}"       # defaults to main
+    loader: local
+    tables:
+      - name: loan_stats    
+      - name: JPM            
+      - name: BAC            
+      - name: C              
+      - name: WFC            
+      - name: GS             
+      - name: macro          

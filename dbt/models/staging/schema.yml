@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: stg_loan_stats
+    description: "Cleaned loan-level data from Lending Club"
+    columns:
+      - name: loan_id
+        description: "Unique loan identifier"
+      - name: loan_amount
+        description: "Original principal amount of the loan"
+      - name: term_months
+        description: "Term length in months"
+      - name: grade
+        description: "credit grade (A-G) assigned to the loan based on borrower credit profile, where A is the lowest risk"
+      - name: interest_rate
+        description: "Annual interest rate for the loan"
+      - name: annual_income
+        description: "Reported annual income of the borrower at time of the application"
+      - name: debt_to_income_ratio
+        description: "Ratio of the borrower's total monthly debt payments to their gross monthly income, as decimal"
+      - name: issue_date
+        description: "Date when the loan was issued to the borrower"
+      - name: default_flag
+        description: "Indicator of whether the loan defaulted. 1 if default occurred, 0 it not"
