@@ -3,3 +3,7 @@ python-dotenv
 yfinance
 fredapi
 pandas
+pyarrow
+dbt-core
+dbt-duckdb
+

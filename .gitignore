@@ -1,4 +1,40 @@
-venv
-/venv
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
 venv/
-.env
+.env/
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python dependencies
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Raw & staging data (if you don't want to check these in)
+# (Optional—omit if you actually want to commit small sample files)
+data/raw/
+data/staging/
+
+# DuckDB warehouse file
+data/staging/warehouse.duckdb
+
+# dbt artifacts
+dbt/logs/
+dbt/target/
+dbt/.dbt/
+
+# Editor folders
+.vscode/
+.idea/
+
+# Macros / temp files
+*_temp.*

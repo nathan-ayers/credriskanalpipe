@@ -1,0 +1,171 @@
+[0m15:13:05.551505 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x78b405fec860>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x78b406bfa720>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x78b405fee540>]}
+
+
+============================== 15:13:05.553138 | 846b4315-1ea8-43be-8954-1f381480f8ba ==============================
+[0m15:13:05.553138 [info ] [MainThread]: Running with dbt=1.10.3
+[0m15:13:05.553410 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/home/pog/.dbt', 'debug': 'False', 'warn_error': 'None', 'log_path': 'logs', 'version_check': 'True', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'introspect': 'True', 'static_parser': 'True', 'log_format': 'default', 'target_path': 'None', 'invocation_command': 'dbt debug', 'send_anonymous_usage_stats': 'True'}
+[0m15:13:05.557341 [info ] [MainThread]: dbt version: 1.10.3
+[0m15:13:05.557544 [info ] [MainThread]: python version: 3.12.7
+[0m15:13:05.557708 [info ] [MainThread]: python path: /home/pog/projects/credriskanalpipe/venv/bin/python3
+[0m15:13:05.557861 [info ] [MainThread]: os info: Linux-6.11.0-29-generic-x86_64-with-glibc2.39
+[0m15:13:05.603590 [info ] [MainThread]: Using profiles dir at /home/pog/.dbt
+[0m15:13:05.603875 [info ] [MainThread]: Using profiles.yml file at /home/pog/.dbt/profiles.yml
+[0m15:13:05.604037 [info ] [MainThread]: Using dbt_project.yml file at /home/pog/projects/credriskanalpipe/dbt_project.yml
+[0m15:13:05.604704 [info ] [MainThread]: adapter type: duckdb
+[0m15:13:05.604906 [info ] [MainThread]: adapter version: 1.9.4
+[0m15:13:05.605075 [info ] [MainThread]: Configuration:
+[0m15:13:05.605224 [info ] [MainThread]:   profiles.yml file [[32mOK found and valid[0m]
+[0m15:13:05.605369 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m15:13:05.605511 [info ] [MainThread]: Required dependencies:
+[0m15:13:05.605665 [debug] [MainThread]: Executing "git --help"
+[0m15:13:05.607184 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--config-env=<name>=<envvar>] <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m15:13:05.607422 [debug] [MainThread]: STDERR: "b''"
+[0m15:13:05.607581 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m15:13:05.607754 [info ] [MainThread]: Connection:
+[0m15:13:05.607912 [info ] [MainThread]:   database: warehouse
+[0m15:13:05.608063 [info ] [MainThread]:   schema: main
+[0m15:13:05.608213 [info ] [MainThread]:   path: ./data/staging/warehouse.duckdb
+[0m15:13:05.608355 [info ] [MainThread]:   config_options: None
+[0m15:13:05.608492 [info ] [MainThread]:   extensions: ['parquet']
+[0m15:13:05.608640 [info ] [MainThread]:   settings: {}
+[0m15:13:05.608789 [info ] [MainThread]:   external_root: .
+[0m15:13:05.608924 [info ] [MainThread]:   use_credential_provider: None
+[0m15:13:05.609065 [info ] [MainThread]:   attach: None
+[0m15:13:05.609198 [info ] [MainThread]:   filesystems: None
+[0m15:13:05.609328 [info ] [MainThread]:   remote: None
+[0m15:13:05.609466 [info ] [MainThread]:   plugins: None
+[0m15:13:05.609605 [info ] [MainThread]:   disable_transactions: False
+[0m15:13:05.609831 [info ] [MainThread]: Registered adapter: duckdb=1.9.4
+[0m15:13:05.641799 [debug] [MainThread]: Acquiring new duckdb connection 'debug'
+[0m15:13:05.651617 [debug] [MainThread]: Using duckdb connection "debug"
+[0m15:13:05.651875 [debug] [MainThread]: On debug: select 1 as id
+[0m15:13:05.652035 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m15:13:05.659057 [debug] [MainThread]: SQL status: OK in 0.007 seconds
+[0m15:13:05.659649 [debug] [MainThread]: On debug: Close
+[0m15:13:05.659910 [info ] [MainThread]:   Connection test: [[32mOK connection ok[0m]
+
+[0m15:13:05.660101 [info ] [MainThread]: [31m1 check failed:[0m
+[0m15:13:05.660261 [info ] [MainThread]: Project loading failed for the following reason:
+ project path </home/pog/projects/credriskanalpipe/dbt_project.yml> not found
+
+[0m15:13:05.660818 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.13602777, "process_in_blocks": "0", "process_kernel_time": 0.070952, "process_mem_max_rss": "136580", "process_out_blocks": "16", "process_user_time": 0.709524}
+[0m15:13:05.661148 [debug] [MainThread]: Command `dbt debug` failed at 15:13:05.661095 after 0.14 seconds
+[0m15:13:05.661366 [debug] [MainThread]: Connection 'debug' was properly closed.
+[0m15:13:05.661566 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x78b407da1070>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x78b405852d80>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x78b4081c1b20>]}
+[0m15:13:05.661823 [debug] [MainThread]: Flushing usage events
+[0m15:13:05.801869 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m15:16:00.696177 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7c0638062e40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7c063a04dc70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7c0638ad13a0>]}
+
+
+============================== 15:16:00.697860 | 28702a68-5569-4e61-960d-6d737e03903d ==============================
+[0m15:16:00.697860 [info ] [MainThread]: Running with dbt=1.10.3
+[0m15:16:00.698137 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'profiles_dir': '/home/pog/.dbt', 'log_path': 'logs', 'version_check': 'True', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'introspect': 'True', 'invocation_command': 'dbt debug', 'log_format': 'default', 'target_path': 'None', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m15:16:00.702174 [info ] [MainThread]: dbt version: 1.10.3
+[0m15:16:00.702417 [info ] [MainThread]: python version: 3.12.7
+[0m15:16:00.702577 [info ] [MainThread]: python path: /home/pog/projects/credriskanalpipe/venv/bin/python3
+[0m15:16:00.702738 [info ] [MainThread]: os info: Linux-6.11.0-29-generic-x86_64-with-glibc2.39
+[0m15:16:00.747232 [info ] [MainThread]: Using profiles dir at /home/pog/.dbt
+[0m15:16:00.747509 [info ] [MainThread]: Using profiles.yml file at /home/pog/.dbt/profiles.yml
+[0m15:16:00.747682 [info ] [MainThread]: Using dbt_project.yml file at /home/pog/projects/credriskanalpipe/dbt_project.yml
+[0m15:16:00.748299 [info ] [MainThread]: adapter type: duckdb
+[0m15:16:00.748488 [info ] [MainThread]: adapter version: 1.9.4
+[0m15:16:00.748662 [info ] [MainThread]: Configuration:
+[0m15:16:00.748834 [info ] [MainThread]:   profiles.yml file [[32mOK found and valid[0m]
+[0m15:16:00.748987 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m15:16:00.749133 [info ] [MainThread]: Required dependencies:
+[0m15:16:00.749296 [debug] [MainThread]: Executing "git --help"
+[0m15:16:00.750988 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--config-env=<name>=<envvar>] <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m15:16:00.751423 [debug] [MainThread]: STDERR: "b''"
+[0m15:16:00.751680 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m15:16:00.751974 [info ] [MainThread]: Connection:
+[0m15:16:00.752238 [info ] [MainThread]:   database: warehouse
+[0m15:16:00.752495 [info ] [MainThread]:   schema: main
+[0m15:16:00.752749 [info ] [MainThread]:   path: ./data/staging/warehouse.duckdb
+[0m15:16:00.752998 [info ] [MainThread]:   config_options: None
+[0m15:16:00.753246 [info ] [MainThread]:   extensions: ['parquet']
+[0m15:16:00.753490 [info ] [MainThread]:   settings: {}
+[0m15:16:00.753739 [info ] [MainThread]:   external_root: .
+[0m15:16:00.753980 [info ] [MainThread]:   use_credential_provider: None
+[0m15:16:00.754224 [info ] [MainThread]:   attach: None
+[0m15:16:00.754463 [info ] [MainThread]:   filesystems: None
+[0m15:16:00.754709 [info ] [MainThread]:   remote: None
+[0m15:16:00.754951 [info ] [MainThread]:   plugins: None
+[0m15:16:00.755188 [info ] [MainThread]:   disable_transactions: False
+[0m15:16:00.755549 [info ] [MainThread]: Registered adapter: duckdb=1.9.4
+[0m15:16:00.787897 [debug] [MainThread]: Acquiring new duckdb connection 'debug'
+[0m15:16:00.797552 [debug] [MainThread]: Using duckdb connection "debug"
+[0m15:16:00.797790 [debug] [MainThread]: On debug: select 1 as id
+[0m15:16:00.797953 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m15:16:00.805188 [debug] [MainThread]: SQL status: OK in 0.007 seconds
+[0m15:16:00.805731 [debug] [MainThread]: On debug: Close
+[0m15:16:00.805966 [info ] [MainThread]:   Connection test: [[32mOK connection ok[0m]
+
+[0m15:16:00.806152 [info ] [MainThread]: [31m1 check failed:[0m
+[0m15:16:00.806312 [info ] [MainThread]: Project loading failed for the following reason:
+ project path </home/pog/projects/credriskanalpipe/dbt_project.yml> not found
+
+[0m15:16:00.806784 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.1374061, "process_in_blocks": "0", "process_kernel_time": 0.064996, "process_mem_max_rss": "136120", "process_out_blocks": "24", "process_user_time": 0.719966}
+[0m15:16:00.807039 [debug] [MainThread]: Command `dbt debug` failed at 15:16:00.806993 after 0.14 seconds
+[0m15:16:00.807223 [debug] [MainThread]: Connection 'debug' was properly closed.
+[0m15:16:00.807410 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7c0638062e40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7c06375ebd40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7c06374da1b0>]}
+[0m15:16:00.807621 [debug] [MainThread]: Flushing usage events
+[0m15:16:00.959155 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m15:23:36.029296 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7eda0ba31e50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7eda0dbb5ee0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7eda0d534c80>]}
+
+
+============================== 15:23:36.030956 | c8db17d5-f898-4e41-a99e-2c2cc4cb422d ==============================
+[0m15:23:36.030956 [info ] [MainThread]: Running with dbt=1.10.3
+[0m15:23:36.031236 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'fail_fast': 'False', 'log_path': 'logs', 'profiles_dir': '/home/pog/.dbt', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'invocation_command': 'dbt debug', 'log_format': 'default', 'static_parser': 'True', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m15:23:36.035174 [info ] [MainThread]: dbt version: 1.10.3
+[0m15:23:36.035387 [info ] [MainThread]: python version: 3.12.7
+[0m15:23:36.035543 [info ] [MainThread]: python path: /home/pog/projects/credriskanalpipe/venv/bin/python3
+[0m15:23:36.035694 [info ] [MainThread]: os info: Linux-6.11.0-29-generic-x86_64-with-glibc2.39
+[0m15:23:36.079630 [info ] [MainThread]: Using profiles dir at /home/pog/.dbt
+[0m15:23:36.079931 [info ] [MainThread]: Using profiles.yml file at /home/pog/.dbt/profiles.yml
+[0m15:23:36.080095 [info ] [MainThread]: Using dbt_project.yml file at /home/pog/projects/credriskanalpipe/dbt_project.yml
+[0m15:23:36.080785 [info ] [MainThread]: adapter type: duckdb
+[0m15:23:36.080980 [info ] [MainThread]: adapter version: 1.9.4
+[0m15:23:36.081145 [info ] [MainThread]: Configuration:
+[0m15:23:36.081292 [info ] [MainThread]:   profiles.yml file [[32mOK found and valid[0m]
+[0m15:23:36.081439 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m15:23:36.081584 [info ] [MainThread]: Required dependencies:
+[0m15:23:36.081745 [debug] [MainThread]: Executing "git --help"
+[0m15:23:36.083337 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--config-env=<name>=<envvar>] <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m15:23:36.083570 [debug] [MainThread]: STDERR: "b''"
+[0m15:23:36.083733 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m15:23:36.083891 [info ] [MainThread]: Connection:
+[0m15:23:36.084044 [info ] [MainThread]:   database: warehouse
+[0m15:23:36.084194 [info ] [MainThread]:   schema: main
+[0m15:23:36.084332 [info ] [MainThread]:   path: ./data/staging/warehouse.duckdb
+[0m15:23:36.084467 [info ] [MainThread]:   config_options: None
+[0m15:23:36.084598 [info ] [MainThread]:   extensions: ['parquet']
+[0m15:23:36.084734 [info ] [MainThread]:   settings: {}
+[0m15:23:36.084867 [info ] [MainThread]:   external_root: .
+[0m15:23:36.084997 [info ] [MainThread]:   use_credential_provider: None
+[0m15:23:36.085135 [info ] [MainThread]:   attach: None
+[0m15:23:36.085271 [info ] [MainThread]:   filesystems: None
+[0m15:23:36.085401 [info ] [MainThread]:   remote: None
+[0m15:23:36.085534 [info ] [MainThread]:   plugins: None
+[0m15:23:36.085668 [info ] [MainThread]:   disable_transactions: False
+[0m15:23:36.085905 [info ] [MainThread]: Registered adapter: duckdb=1.9.4
+[0m15:23:36.117594 [debug] [MainThread]: Acquiring new duckdb connection 'debug'
+[0m15:23:36.127450 [debug] [MainThread]: Using duckdb connection "debug"
+[0m15:23:36.127702 [debug] [MainThread]: On debug: select 1 as id
+[0m15:23:36.127858 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m15:23:36.134597 [debug] [MainThread]: SQL status: OK in 0.007 seconds
+[0m15:23:36.135108 [debug] [MainThread]: On debug: Close
+[0m15:23:36.135326 [info ] [MainThread]:   Connection test: [[32mOK connection ok[0m]
+
+[0m15:23:36.135515 [info ] [MainThread]: [31m1 check failed:[0m
+[0m15:23:36.135674 [info ] [MainThread]: Project loading failed for the following reason:
+ project path </home/pog/projects/credriskanalpipe/dbt_project.yml> not found
+
+[0m15:23:36.136137 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.13327716, "process_in_blocks": "0", "process_kernel_time": 0.067808, "process_mem_max_rss": "135940", "process_out_blocks": "24", "process_user_time": 0.717973}
+[0m15:23:36.136393 [debug] [MainThread]: Command `dbt debug` failed at 15:23:36.136347 after 0.13 seconds
+[0m15:23:36.136570 [debug] [MainThread]: Connection 'debug' was properly closed.
+[0m15:23:36.136758 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7eda0ba31e50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7eda0718fb60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7eda0b50f710>]}
+[0m15:23:36.136967 [debug] [MainThread]: Flushing usage events
+[0m15:23:36.282579 [debug] [MainThread]: An error was encountered while trying to flush usage events
