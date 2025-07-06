@@ -2,23 +2,66 @@ version: 2
 
 models:
   - name: stg_loan_stats
-    description: "Cleaned loan-level data from Lending Club"
+    description: "Cleaned loan-level data from Lending Club, with typed fields and flags for downstream analytics."
     columns:
       - name: loan_id
-        description: "Unique loan identifier"
+        description: "Unique identifier for each loan record assigned by Lending Club."
+        tests:
+          - not_null
+          - unique
+
       - name: loan_amount
-        description: "Original principal amount of the loan"
+        description: "Total principal amount borrowed at the inception of the loan (in USD)."
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "loan_amount > 0"
+
       - name: term_months
-        description: "Term length in months"
+        description: "Scheduled repayment period for the loan, in months (e.g., 36, 60)."
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "term_months > 0"
+
       - name: grade
-        description: "credit grade (A-G) assigned to the loan based on borrower credit profile, where A is the lowest risk"
+        description: "Credit grade (A–G) assigned to the loan based on borrower credit profile, where A is the lowest risk."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+
       - name: interest_rate
-        description: "Annual interest rate for the loan"
+        description: "Annual interest rate for the loan, expressed as a decimal (e.g., 0.085 for 8.5%)."
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "interest_rate >= 0 AND interest_rate <= 1"
+
       - name: annual_income
-        description: "Reported annual income of the borrower at time of the application"
+        description: "Reported annual income of the borrower at application time, in USD."
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "annual_income >= 0"
+
       - name: debt_to_income_ratio
-        description: "Ratio of the borrower's total monthly debt payments to their gross monthly income, as decimal"
+        description: "Ratio of the borrower's total monthly debt payments to their gross monthly income, expressed as a decimal."
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "debt_to_income_ratio >= 0 AND debt_to_income_ratio <= 1"
+
       - name: issue_date
-        description: "Date when the loan was issued to the borrower"
+        description: "Date on which the loan was issued to the borrower."
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "issue_date >= '2000-01-01'"
+
       - name: default_flag
-        description: "Indicator of whether the loan defaulted. 1 if default occurred, 0 it not"
+        description: "Indicator of whether the loan defaulted: 1 if charged off or default, 0 otherwise."
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "default_flag IN (0,1)"
