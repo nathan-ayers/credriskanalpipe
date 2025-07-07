@@ -11,12 +11,6 @@ profile: 'credrisk_pipeline'
 on-run-start:
   - "{{ log('Registering parquet sources…', info=True) }}"
   - "{{ register_parquet(path='../data/staging/loan_stats.parquet', alias='loan_stats') }}"
-  # - "{{ register_parquet(path='../../data/staging/JPM.parquet',        alias='JPM') }}"
-  # - "{{ register_parquet(path='../../data/staging/BAC.parquet',        alias='BAC') }}"
-  # - "{{ register_parquet(path='../../data/staging/C.parquet',          alias='C') }}"
-  # - "{{ register_parquet(path='../../data/staging/WFC.parquet',        alias='WFC') }}"
-  # - "{{ register_parquet(path='../../data/staging/GS.parquet',         alias='GS') }}"
-  # - "{{ register_parquet(path='../../data/staging/macro.parquet',      alias='macro') }}"
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be

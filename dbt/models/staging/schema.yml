@@ -65,3 +65,59 @@ models:
           - not_null
           - expression_is_true:
               expression: "default_flag IN (0,1)"
+
+  - name: stg_bank_prices
+    description: "All five banks' OHLC + volume in one table, ready for analytics."
+    columns:
+      - name: ticker
+        description: "Bank ticker symbol (e.g. JPM, BAC)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['JPM','BAC','C','WFC','GS']
+      - name: price_date
+        description: "Trading date for this price."
+        tests:
+          - not_null
+      - name: open_price
+        description: "Opening price on this date."
+        tests:
+          - not_null
+      - name: high_price
+        description: "Highest price on this date."
+        tests:
+          - not_null
+      - name: low_price
+        description: "Lowest price on this date."
+        tests:
+          - not_null
+      - name: close_price
+        description: "Closing price on this date."
+        tests:
+          - not_null
+      - name: volume
+        description: "Number of shares traded."
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "volume >= 0"
+
+  - name: stg_macro
+    description: "Monthly macro indicators: unemployment, GDP, CPI."
+    columns:
+      - name: obs_date
+        description: "Date of observation (first of month)."
+        tests:
+          - not_null
+      - name: unemployment_rate
+        description: "Unemployment rate (%) at observation date."
+        tests:
+          - not_null
+      - name: gdp_level
+        description: "Gross Domestic Product level at observation date."
+        tests:
+          - not_null
+      - name: cpi_level
+        description: "Consumer Price Index level at observation date."
+        tests:
+          - not_null

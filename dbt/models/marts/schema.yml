@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: mart_market_metrics
+    description: "Monthly average returns and volatility for each bank ticker."
+    columns:
+      - name: ticker
+        description: "Bank symbol (JPM, BAC, C, WFC, GS)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['JPM','BAC','C','WFC','GS']
+      - name: month
+        description: "First day of the observation month."
+        tests:
+          - not_null
