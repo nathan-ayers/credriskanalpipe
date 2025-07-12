@@ -6,4 +6,5 @@ pandas
 pyarrow
 dbt-core
 dbt-duckdb
-
+matplotlib
+streamlit

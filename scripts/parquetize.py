@@ -48,7 +48,7 @@ def parquetize_loans():
 
         # Load CSV into DataFrame without low-memory type guessing
         with z.open(csv_name) as f:
-            df = pd.read_csv(f, low_memory=False)
+            df = pd.read_csv(f, skiprows=1, low_memory=False)
 
     # Drop empty columns to reduce file size and noise
     null_cols = df.columns[df.isna().all()].tolist()
