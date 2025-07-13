@@ -39,3 +39,5 @@ dbt/.dbt/
 
 # Macros / temp files
 *_temp.*
+
+livid.webm
