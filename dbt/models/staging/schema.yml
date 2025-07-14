@@ -35,7 +35,7 @@ models:
         tests:
           - not_null
 
-      - name: price_date
+      - name: date
         description: "Trade date"
         tests:
           - not_null

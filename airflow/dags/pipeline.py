@@ -37,5 +37,26 @@ with DAG(
             "python3 scripts/parquetize.py"
         ),
     )
+    
+    # 3) Materialize our data into our warehouse
+    t3_dbt_run = BashOperator(
+        task_id='dbt_run',
+        bash_command=(
+            # 1) cd into your dbt folder
+            "cd {{ dag_run.conf.get('project_root','/home/pog/projects/credriskanalpipe') }}/dbt && "
+            # 2) run all of your dbt models against the 'dev' target profile
+            "dbt run --target dev"
+        )
+    )
+    
+    # 4) Run dbt tests to validate the tables
+    t4_dbt_test = BashOperator(
+        task_id="dbt_test",
+        bash_command=(
+            "cd {{ dag_run.conf.get('project_root','/home/pog/projects/credriskanalpipe') }}/dbt && "
+            # Executes all tests you defined in schema.yml (uniqueness, not_null, custom tests, etc.)
+            "dbt test --target dev"
+        )
+    )
 
-    t1_fetch >> t2_parquet
+    t1_fetch >> t2_parquet >> t3_dbt_run >> t4_dbt_test

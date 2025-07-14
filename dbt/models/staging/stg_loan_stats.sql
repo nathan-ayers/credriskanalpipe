@@ -26,3 +26,5 @@ SELECT
 end as default_flag
 FROM raw
 WHERE loan_amount IS NOT NULL
+AND trim(issue_d) != '' 
+AND trim(issue_d) IS NOT NULL
