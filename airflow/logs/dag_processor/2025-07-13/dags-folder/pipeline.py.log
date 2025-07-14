@@ -106,3 +106,12 @@
 {"timestamp":"2025-07-13T08:30:13.759315","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
 {"timestamp":"2025-07-13T08:30:43.915907","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
 {"timestamp":"2025-07-13T08:31:14.081974","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-13T22:36:04.167608","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-13T22:36:34.335593","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-13T22:37:04.505855","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-13T22:37:34.675056","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-13T22:38:04.839569","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-13T22:38:35.010453","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-13T22:39:05.186127","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-13T22:39:35.353915","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-13T22:40:05.527219","level":"info","event":"Filling up the DagBag from /home/pog/projects/credriskanalpipe/airflow/dags/pipeline.py","logger":"airflow.models.dagbag.DagBag"}

@@ -4,9 +4,9 @@
 with daily as (
     select
         ticker,
-        price_date,
-        (close_price - lag(close_price) over (partition by ticker order by price_date))
-         / lag(close_price) over (partition by ticker order by price_date)
+        date,
+        (close_price - lag(close_price) over (partition by ticker order by date))
+         / lag(close_price) over (partition by ticker order by date)
         as daily_return
     from {{ ref('stg_bank_prices') }}
 ),
@@ -14,7 +14,7 @@ with daily as (
 monthly as (
     select
         ticker,
-        date_trunc('month', price_date) as month,
+        date_trunc('month', date) as month,
         avg(daily_return) as avg_return,
         stddev(daily_return) as volatility
     from daily

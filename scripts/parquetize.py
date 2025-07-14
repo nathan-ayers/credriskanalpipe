@@ -10,6 +10,7 @@ Step 2: Convert raw CSVs & ZIP into Parquet files under data/staging/
 
 import os
 import zipfile
+from pathlib import Path    # ← add this
 import pandas as pd
 
 # Define base directories for raw and staged data
@@ -62,37 +63,35 @@ def parquetize_loans():
 
 
 def parquetize_banks():
-    """
-    Convert bank price CSVs to Parquet, handling their multi-row headers:
-    - Skip the first 3 rows (metrics header, ticker header, blank date label).
-    - Assign explicit column names: Date, Price, Close, High, Low, Open, Volume.
-    - Parse 'Date' column as datetime.
-    - Output one Parquet file per ticker.
-    """
-    bank_dir = os.path.join(RAW, 'bank_prices')
-    if not os.path.isdir(bank_dir):
-        raise FileNotFoundError(f"Missing bank_prices dir: {bank_dir}")
-    
-    # Explicit column names to match data columns
-    cols = ['Date', 'Price', 'Close', 'High', 'Low', 'Open', 'Volume']
+    bank_dir = Path(RAW) / 'bank_prices'
+    for csv_path in bank_dir.glob("*.csv"):
+        ticker = csv_path.stem
 
-    for filename in os.listdir(bank_dir):
-        if filename.lower().endswith('.csv'):
-            csv_path = os.path.join(bank_dir, filename)
-            ticker = os.path.splitext(filename)[0]
+        # Skip rows 1 & 2 (Ticker line and the empty header), keep line0 as header
+        df = pd.read_csv(
+            csv_path,
+            skiprows=[1,2],
+            parse_dates=['Price'],       # 'Price' column really holds your dates
+        )
 
-            # Skip first 3 rows to bypass header metadata
-            df = pd.read_csv(
-                csv_path,
-                skiprows=3,
-                header=None,
-                names=cols,
-                parse_dates=['Date']
-            )
+        # Rename & pick
+        df2 = (
+            df
+            .rename(columns={
+                'Price':  'date',
+                'Open':   'open_price',
+                'High':   'high_price',
+                'Low':    'low_price',
+                'Close':  'close_price',
+                'Volume': 'volume',
+            })
+            .loc[:, ['date','open_price','high_price','low_price','close_price','volume']]
+        )
 
-            out_path = os.path.join(STAGING, f'{ticker}.parquet')
-            df.to_parquet(out_path, index=False)
-            print(f"Wrote bank Parquet for {ticker}: {out_path}")
+        out_path = Path(STAGING) / f"{ticker}.parquet"
+        df2.to_parquet(out_path, index=False)
+        print(f"Wrote bank Parquet for {ticker}: {out_path}")
+
 
 
 def parquetize_macro():

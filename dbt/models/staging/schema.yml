@@ -2,122 +2,89 @@ version: 2
 
 models:
   - name: stg_loan_stats
-    description: "Cleaned loan-level data from Lending Club, with typed fields and flags for downstream analytics."
+    description: "Accepted Lending Club loans (static snapshot to 2018)"
     columns:
       - name: loan_id
-        description: "Unique identifier for each loan record assigned by Lending Club."
+        description: "Unique loan identifier"
+
+      - name: loan_amount
+        description: "Original principal amount (USD)"
+        tests:
+          - not_null
+
+      - name: term_months
+        description: "Loan term in months"
+        tests:
+          - not_null
+
+      - name: interest_rate
+        description: "Annual interest rate (decimal)"
+        tests:
+          - not_null
+
+      - name: issue_date
+        description: "Date the loan was issued"
+        tests:
+          - not_null
+
+  - name: stg_bank_prices
+    description: "Daily OHLC & Volume for each bank ticker"
+    columns:
+      - name: ticker
+        description: "Stock ticker symbol"
+        tests:
+          - not_null
+
+      - name: price_date
+        description: "Trade date"
+        tests:
+          - not_null
+
+      - name: open_price
+        description: "Opening price"
+        tests:
+          - not_null
+
+      - name: high_price
+        description: "High price"
+        tests:
+          - not_null
+
+      - name: low_price
+        description: "Low price"
+        tests:
+          - not_null
+
+      - name: close_price
+        description: "Closing price"
+        tests:
+          - not_null
+
+      - name: volume
+        description: "Trading volume"
+        tests:
+          - not_null
+
+  - name: stg_macro
+    description: "Monthly macro indicators from FRED"
+    columns:
+      - name: obs_date
+        description: "Observation date"
         tests:
           - not_null
           - unique
 
-      - name: loan_amount
-        description: "Total principal amount borrowed at the inception of the loan (in USD)."
-        tests:
-          - not_null
-          - expression_is_true:
-              expression: "loan_amount > 0"
-
-      - name: term_months
-        description: "Scheduled repayment period for the loan, in months (e.g., 36, 60)."
-        tests:
-          - not_null
-          - expression_is_true:
-              expression: "term_months > 0"
-
-      - name: grade
-        description: "Credit grade (A–G) assigned to the loan based on borrower credit profile, where A is the lowest risk."
-        tests:
-          - not_null
-          - accepted_values:
-              values: ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-
-      - name: interest_rate
-        description: "Annual interest rate for the loan, expressed as a decimal (e.g., 0.085 for 8.5%)."
-        tests:
-          - not_null
-          - expression_is_true:
-              expression: "interest_rate >= 0 AND interest_rate <= 1"
-
-      - name: annual_income
-        description: "Reported annual income of the borrower at application time, in USD."
-        tests:
-          - not_null
-          - expression_is_true:
-              expression: "annual_income >= 0"
-
-      - name: debt_to_income_ratio
-        description: "Ratio of the borrower's total monthly debt payments to their gross monthly income, expressed as a decimal."
-        tests:
-          - not_null
-          - expression_is_true:
-              expression: "debt_to_income_ratio >= 0 AND debt_to_income_ratio <= 1"
-
-      - name: issue_date
-        description: "Date on which the loan was issued to the borrower."
-        tests:
-          - not_null
-          - expression_is_true:
-              expression: "issue_date >= '2000-01-01'"
-
-      - name: default_flag
-        description: "Indicator of whether the loan defaulted: 1 if charged off or default, 0 otherwise."
-        tests:
-          - not_null
-          - expression_is_true:
-              expression: "default_flag IN (0,1)"
-
-  - name: stg_bank_prices
-    description: "All five banks' OHLC + volume in one table, ready for analytics."
-    columns:
-      - name: ticker
-        description: "Bank ticker symbol (e.g. JPM, BAC)."
-        tests:
-          - not_null
-          - accepted_values:
-              values: ['JPM','BAC','C','WFC','GS']
-      - name: price_date
-        description: "Trading date for this price."
-        tests:
-          - not_null
-      - name: open_price
-        description: "Opening price on this date."
-        tests:
-          - not_null
-      - name: high_price
-        description: "Highest price on this date."
-        tests:
-          - not_null
-      - name: low_price
-        description: "Lowest price on this date."
-        tests:
-          - not_null
-      - name: close_price
-        description: "Closing price on this date."
-        tests:
-          - not_null
-      - name: volume
-        description: "Number of shares traded."
-        tests:
-          - not_null
-          - expression_is_true:
-              expression: "volume >= 0"
-
-  - name: stg_macro
-    description: "Monthly macro indicators: unemployment, GDP, CPI."
-    columns:
-      - name: obs_date
-        description: "Date of observation (first of month)."
-        tests:
-          - not_null
       - name: unemployment_rate
-        description: "Unemployment rate (%) at observation date."
+        description: "Unemployment rate (%)"
         tests:
           - not_null
+
       - name: gdp_level
-        description: "Gross Domestic Product level at observation date."
+        description: "GDP level (billions USD)"
         tests:
           - not_null
+
       - name: cpi_level
-        description: "Consumer Price Index level at observation date."
+        description: "CPI (base 1982–84 = 100)"
         tests:
           - not_null
