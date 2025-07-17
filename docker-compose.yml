@@ -1,24 +1,65 @@
 services:
-  kafka:
-    image: apache/kafka:latest
-    container_name: credriskanalpipe-kafka
+  broker:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: broker
     ports:
       - "9092:9092"
-      - "9093:9093"
+      - "9101:9101" # JMX port, useful for monitoring
     environment:
-      # ----- KRaft mode flags -----
+      # KRAFT Configuration
+      KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      # NEW: Define separate internal and external listeners
+      KAFKA_LISTENERS: PLAINTEXT://broker:29092,CONTROLLER://broker:29093,PLAINTEXT_HOST://localhost:9092
+      # Advertise only the broker-facing listeners
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      # Specify the controller listener name
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-
-      # ----- Listeners -----
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker:29093 # Use the controller listener port
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+      CLUSTER_ID: CqS0QpJVRO43SQM0khFYXg 
+    volumes:
+      - kafka-data:/var/lib/kafka/data
 
-      # ----- Required KRaft setting -----
-      KAFKA_NODE_ID: 1          # <-- THIS WAS MISSING
+  jobmanager:
+    image: apache/flink:1.18.1-scala_2.12 # Ensure this Flink version matches your POM
+    container_name: flink-jobmanager
+    ports:
+      - "8081:8081" # Flink Web UI
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        jobmanager.memory.process.size: 1g
+        taskmanager.memory.process.size: 1g
+        taskmanager.numberOfTaskSlots: 1
+        rest.bind-port: 8081
+    volumes:
+      # Mount the target directory containing your Flink job JAR
+      - ./flink_jobs/flink-consumer/target:/opt/flink-consumer/target
+    depends_on:
+      - broker # JobManager depends on Kafka being up
 
-      # (Optional) default number of partitions
-      KAFKA_NUM_PARTITIONS: 1
+  taskmanager:
+    image: apache/flink:1.18.1-scala_2.12 # Ensure this Flink version matches your POM
+    container_name: flink-taskmanager
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.memory.process.size: 1g
+        taskmanager.numberOfTaskSlots: 1
+    depends_on:
+      - jobmanager # TaskManager depends on JobManager
+volumes:
+  kafka-data:
