@@ -10,8 +10,10 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
       # NEW: Define separate internal and external listeners
-      KAFKA_LISTENERS: PLAINTEXT://broker:29092,CONTROLLER://broker:29093,PLAINTEXT_HOST://localhost:9092
+      # CHANGE HERE: Use 0.0.0.0 for PLAINTEXT_HOST binding inside the container
+      KAFKA_LISTENERS: PLAINTEXT://broker:29092,CONTROLLER://broker:29093,PLAINTEXT_HOST://0.0.0.0:9092
       # Advertise only the broker-facing listeners
+      # This remains localhost for PLAINTEXT_HOST for external clients on your host machine
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
       # Specify the controller listener name
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
