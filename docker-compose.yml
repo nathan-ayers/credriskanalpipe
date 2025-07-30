@@ -47,7 +47,7 @@ services:
         rest.bind-port: 8081
     volumes:
       # Mount the target directory containing your Flink job JAR
-      - ./flink_jobs/flink-consumer/target:/opt/flink-consumer/target
+      - ./flink_jobs/flink-consumer/target:/opt/flink/usrlib
     depends_on:
       - broker # JobManager depends on Kafka being up
 
