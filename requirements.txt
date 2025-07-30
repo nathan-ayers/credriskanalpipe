@@ -9,3 +9,4 @@ dbt-duckdb
 matplotlib
 streamlit
 apache-airflow
+kafka-python

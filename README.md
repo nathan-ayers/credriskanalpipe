@@ -1,6 +1,6 @@
 # Local Financial Data Pipeline
 
-An end-to-end, zero‑cost project showcasing data engineering, analytics, and modeling on financial data. fileciteturn0file0
+An end-to-end, zero‑cost project showcasing data engineering, analytics, and modeling on financial data.
 
 ---
 
@@ -15,8 +15,8 @@ By project end, you will have a fully automated, reproducible pipeline that mimi
 ## Technology Stack & Roles
 
 - **Python**: Orchestrates data ingestion (`requests`) and transformation (`pandas`), providing scripting flexibility and rapid prototyping.
-- **Apache Kafka**: Distributed message broker for ingesting real-time financial and macroeconomic streams.
-- **Apache Flink**: Stream processing engine for continuous analytics on live data.
+- **Apache Kafka**: Distributed message broker for ingesting real-time financial and macroeconomic streams. Used for `raw_market_ohlcv` topic for streaming market data.
+- **Apache Flink**: Stream processing engine for continuous analytics on live data. Successfully configured to consume real-time market data from Kafka.
 - **Apache Spark**: Distributed compute platform for scalable ETL, batch processing, and ML workloads.
 - **DuckDB**: Zero-config, high-performance SQL engine acting as the local data warehouse for ad-hoc analytics.
 - **Parquet**: Columnar storage format in `data/staging`—reduces file size and accelerates read performance.
@@ -57,20 +57,30 @@ By project end, you will have a fully automated, reproducible pipeline that mimi
  └───────────┘                          └───────────┘
       │                                     │
       │ Python & SQL analytics              │
-      ▼                                     │
- ┌───────────┐      Streamlit UI     ┌────────────────┐
- │ Notebooks │ ────────────────────▶ │ streamlit_app/ │
- └───────────┘                       └────────────────┘
-      ▲                                      │
-      │ CI/CD (GitHub Actions)               │
-      └──────────────────────────────────────┘
-```
+      ▼                                     ▼
+ ┌───────────┐                           ┌───────────┐
+ │ Kafka     │ ◀───────────────────────  │ Market    │
+ │ (Broker)  │                           │ Data      │
+ └───────────┘                           │ Producer  │
+      │ Stream Ingestion                     └───────────┘
+      │                                       ▲
+      ▼                                       │
+ ┌───────────┐      Stream Processing         │
+ │ Flink     │ ────────────────────────▶  ┌───────────┐
+ │ (Consumer)│                            │ Spark     │
+ └───────────┘                            │ (Batch    │
+      │                                   │ ETL)      │
+      │                                   └───────────┘
+      ▼                                       │
+ ┌───────────┐      Streamlit UI       ┌────────────────┐
+ │ Notebooks │ ────────────────────▶   │ streamlit_app/ │
+ └───────────┘                         └────────────────┘
+      ▲                                       │
+      │ CI/CD (GitHub Actions)                │
+      └───────────────────────────────────────┘
+Repository Structure
+Plaintext
 
----
-
-## Repository Structure
-
-```text
 project/
 ├─ data/
 │  ├─ raw/             # Raw CSVs & JSON
@@ -82,36 +92,27 @@ project/
 ├─ airflow/            # Docker Compose & DAGs for Airflow
 ├─ dbt/                # dbt project (models, tests, docs)
 ├─ notebooks/          # EDA & modeling notebooks
-├─ streamlit_app/      # Streamlit dashboard code
+├─ streamlit_app/      # Source code for the interactive Streamlit dashboard
 ├─ scripts/            # Ingestion & parquetize scripts
 ├─ docker-compose.yml  # Services: Kafka, Zookeeper, Spark, Flink, Airflow
 ├─ Makefile            # Cron-friendly command shortcuts
 ├─ requirements.txt    # Python dependencies
 └─ README.md           # This file
-```
+Folder Descriptions
+Path	Purpose
+data/raw/	Store original, untouched data files downloaded daily—your “ground truth” copy.
+data/staging/	Store cleaned, Parquet-converted files for performance.
+kafka/	Kafka producer & consumer scripts to ingest and process real-time streams.
+spark_jobs/	Batch ETL and analytics scripts leveraging Spark for distributed compute.
+flink_jobs/	Stream processing jobs using Flink for continuous analytics.
+airflow/	Configuration for orchestrating pipeline via Airflow (Docker Compose + DAGs).
+dbt/	SQL transformation logic, tests, and documentation for building a star schema data warehouse.
+notebooks/	Jupyter notebooks for exploratory data analysis and model development.
+streamlit_app/	Source code for the interactive Streamlit dashboard.
+scripts/	Python scripts for initial data ingestion (fetch_raw.py) and conversion (parquetize.py).
+.gitignore	Lists files and folders Git ignores (e.g., data/raw/, virtual environments, compiled files).
+Makefile	Defines shortcuts like make ingest, make transform, and make dashboard—enabling cron-friendly automation.
+docker-compose.yml	Configuration for spinning up local Kafka, Zookeeper, Spark, Flink, and Airflow services.
+requirements.txt	Python dependencies (e.g., requests, pandas, confluent-kafka, pyspark, apache-flink, duckdb, dbt, streamlit).
 
----
-
-## Folder Descriptions
-
-| Path                  | Purpose                                                                                                                                     |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| `data/raw/`           | Store original, untouched data files downloaded daily—your “ground truth” copy.                                                              |
-| `data/staging/`       | Store cleaned, Parquet-converted files for performance.                                                                                     |
-| `kafka/`              | Kafka producer & consumer scripts to ingest and process real-time streams.                                                                  |
-| `spark_jobs/`         | Batch ETL and analytics scripts leveraging Spark for distributed compute.                                                                     |
-| `flink_jobs/`         | Stream processing jobs using Flink for continuous analytics.                                                                                 |
-| `airflow/`            | Configuration for orchestrating pipeline via Airflow (Docker Compose + DAGs).                                                                |
-| `dbt/`                | SQL transformation logic, tests, and documentation for building a star schema data warehouse.                                                 |
-| `notebooks/`          | Jupyter notebooks for exploratory data analysis and model development.                                                                       |
-| `streamlit_app/`      | Source code for the interactive Streamlit dashboard.                                                                                         |
-| `scripts/`            | Python scripts for initial data ingestion (`fetch_raw.py`) and conversion (`parquetize.py`).                                                  |
-| `.gitignore`          | Lists files and folders Git ignores (e.g., `data/raw/`, virtual environments, compiled files).                                               |
-| `Makefile`            | Defines shortcuts like `make ingest`, `make transform`, and `make dashboard`—enabling cron-friendly automation.                             |
-| `docker-compose.yml`  | Configuration for spinning up local Kafka, Zookeeper, Spark, Flink, and Airflow services.                                                    |
-| `requirements.txt`    | Python dependencies (e.g., `requests`, `pandas`, `confluent-kafka`, `pyspark`, `apache-flink`, `duckdb`, `dbt`, `streamlit`).|
-
-
-ENV variables:
-
-You'll need to grab an API key from: https://fredaccount.stlouisfed.org/ and 
+You'll need to grab an API key from: https://fredaccount.stlouisfed.org/
