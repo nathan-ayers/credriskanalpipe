@@ -1,1 +1,3 @@
+com/credriskanalpipe/flink/MarketData.class
 com/credriskanalpipe/flink/MarketDataConsumer.class
+com/credriskanalpipe/flink/MarketDataDeserializationSchema.class
