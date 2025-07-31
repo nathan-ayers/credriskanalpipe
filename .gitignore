@@ -41,3 +41,4 @@ dbt/.dbt/
 *_temp.*
 
 livid.webm
+flink-consumer-1.0-SNAPSHOT.jar
