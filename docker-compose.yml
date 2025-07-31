@@ -27,7 +27,7 @@ services:
       KAFKA_LOG_DIRS: /var/lib/kafka/data
       KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: localhost
-      CLUSTER_ID: CqS0QpJVRO43SQM0khFYXg 
+      CLUSTER_ID: CqS0QpJVRO43SQM0khFYXg
     volumes:
       - kafka-data:/var/lib/kafka/data
 
@@ -53,6 +53,7 @@ services:
 
   taskmanager:
     image: apache/flink:1.18.1-scala_2.12 # Ensure this Flink version matches your POM
+    hostname: taskmanager # Added hostname for clarity and consistency
     container_name: flink-taskmanager
     command: taskmanager
     environment:
@@ -61,7 +62,25 @@ services:
         jobmanager.rpc.address: jobmanager
         taskmanager.memory.process.size: 1g
         taskmanager.numberOfTaskSlots: 1
+        taskmanager.bind-host: 0.0.0.0 # Added for explicit binding
+    volumes:
+      # Mount the target directory containing your Flink job JAR
+      - ./flink_jobs/flink-consumer/target:/opt/flink/usrlib
+      # ADDED: Mount the DuckDB data volume here
+      - ./data/staging:/mnt/duckdb
     depends_on:
       - jobmanager # TaskManager depends on JobManager
+      - duckdb # ADDED: TaskManager now also depends on DuckDB
+
+
+  duckdb:
+    image: qldrsc/duckdb 
+    hostname: duckdb
+    container_name: duckdb
+    volumes:
+      - duckdb_data:/data
+    command: ["tail", "-f", "/dev/null"]
+
 volumes:
   kafka-data:
+  duckdb_data: # ADDED: Define the duckdb_data named volume

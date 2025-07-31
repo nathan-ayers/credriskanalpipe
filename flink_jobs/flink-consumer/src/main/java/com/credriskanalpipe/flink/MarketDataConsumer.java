@@ -1,7 +1,11 @@
 package com.credriskanalpipe.flink;
 
+import com.credriskanalpipe.flink.DuckDBSinkFunction;
+import com.credriskanalpipe.flink.MarketData;
+import com.credriskanalpipe.flink.MarketDataDeserializationSchema; // <-- NEW: Import your custom deserializer
+
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.serialization.SimpleStringSchema;
+// import org.apache.flink.api.common.serialization.SimpleStringSchema; // <-- REMOVE or comment out
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -18,33 +22,30 @@ public class MarketDataConsumer {
 
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        KafkaSource<String> source = KafkaSource.<String>builder()
-                .setBootstrapServers("broker:29092")
-                .setTopics("raw_market_ohlcv")
+        // --- CORRECTED KAFKA SOURCE TO USE MARKETDATA DESERIALIZER ---
+        KafkaSource<MarketData> source = KafkaSource.<MarketData>builder() // <-- Change <String> to <MarketData>
+                .setBootstrapServers("broker:9092") // Assuming this is correct from docker-compose
+                .setTopics("market_data") // Assuming this is your topic name
                 .setGroupId("flink-market-consumer-group")
                 .setStartingOffsets(OffsetsInitializer.earliest())
-                .setValueOnlyDeserializer(new SimpleStringSchema())
+                .setValueOnlyDeserializer(new MarketDataDeserializationSchema()) // <-- NEW: Use your custom deserializer
                 .build();
 
-        DataStream<String> kafkaStream = env.fromSource(source, WatermarkStrategy.noWatermarks(), "Kafka Source");
+        // --- kafkaStream is now DataStream<MarketData> ---
+        DataStream<MarketData> kafkaStream = env.fromSource(source, WatermarkStrategy.noWatermarks(), "Kafka Source");
 
-        // Add a map function to explicitly log and handle potential deserialization issues
-        DataStream<String> processedStream = kafkaStream.map(message -> {
-            try {
-                // Here, you could add JSON parsing logic if needed
-                // For now, we just log the raw message to confirm receipt
-                LOG.info("Successfully received message from Kafka: {}", message);
-                return message; // Pass the message through
-            } catch (Exception e) {
-                LOG.error("Failed to process message: {}", message, e);
-                return null; // Filter out messages that cause errors
-            }
-        }).filter(message -> message != null);
+        // --- Remove the unnecessary .map and .filter, as deserialization is handled by the source ---
+        DataStream<MarketData> processedStream = kafkaStream.map(marketData -> {
+            // This map function can be used for logging or further processing of MarketData objects
+            LOG.info("Successfully received and parsed message from Kafka: {}", marketData);
+            return marketData;
+        }).filter(marketData -> marketData != null); // Keep the filter if you want to filter nulls
 
-        // Sink to logs (equivalent to .print() but with explicit logging)
-        processedStream.addSink(new org.apache.flink.streaming.api.functions.sink.PrintSinkFunction<>());
+        // Sink to DuckDB
+        String duckDbPath = "/mnt/duckdb/warehouse.duckdb"; // Path within the Flink container
+        processedStream.addSink(new DuckDBSinkFunction(duckDbPath));
 
         LOG.info("Executing Flink job...");
-        env.execute("Kafka Market Data Consumer with Logging");
+        env.execute("Kafka Market Data Consumer with DuckDB Sink"); // Changed job name for clarity
     }
 }

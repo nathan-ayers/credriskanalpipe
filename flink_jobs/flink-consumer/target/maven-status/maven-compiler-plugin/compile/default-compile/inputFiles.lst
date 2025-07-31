@@ -1,3 +1,4 @@
+/home/pog/projects/credriskanalpipe/flink_jobs/flink-consumer/src/main/java/com/credriskanalpipe/flink/DuckDBSinkFunction.java
 /home/pog/projects/credriskanalpipe/flink_jobs/flink-consumer/src/main/java/com/credriskanalpipe/flink/MarketDataDeserializationSchema.java
 /home/pog/projects/credriskanalpipe/flink_jobs/flink-consumer/src/main/java/com/credriskanalpipe/flink/MarketData.java
 /home/pog/projects/credriskanalpipe/flink_jobs/flink-consumer/src/main/java/com/credriskanalpipe/flink/MarketDataConsumer.java
