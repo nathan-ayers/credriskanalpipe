@@ -21,31 +21,26 @@ public class MarketDataConsumer {
         LOG.info("Starting Flink Kafka Consumer Job...");
 
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1); // <-- must come after the line above
 
-        // --- CORRECTED KAFKA SOURCE TO USE MARKETDATA DESERIALIZER ---
-        KafkaSource<MarketData> source = KafkaSource.<MarketData>builder() // <-- Change <String> to <MarketData>
-                .setBootstrapServers("broker:9092") // Assuming this is correct from docker-compose
-                .setTopics("market_data") // Assuming this is your topic name
-                .setGroupId("flink-market-consumer-group")
-                .setStartingOffsets(OffsetsInitializer.earliest())
-                .setValueOnlyDeserializer(new MarketDataDeserializationSchema()) // <-- NEW: Use your custom deserializer
+        KafkaSource<MarketData> source = KafkaSource.<MarketData>builder()
+                .setBootstrapServers("broker:29092")               // internal Kafka listener
+                .setTopics("market_data")
+                .setGroupId("flink-market-consumer-group" + System.currentTimeMillis())
+                .setStartingOffsets(OffsetsInitializer.latest())
+                .setValueOnlyDeserializer(new MarketDataDeserializationSchema())
                 .build();
 
-        // --- kafkaStream is now DataStream<MarketData> ---
-        DataStream<MarketData> kafkaStream = env.fromSource(source, WatermarkStrategy.noWatermarks(), "Kafka Source");
+        DataStream<MarketData> stream =
+                env.fromSource(source, WatermarkStrategy.noWatermarks(), "Kafka Source")
+                .map(m -> { LOG.info("Got: {}", m); return m; });
 
-        // --- Remove the unnecessary .map and .filter, as deserialization is handled by the source ---
-        DataStream<MarketData> processedStream = kafkaStream.map(marketData -> {
-            // This map function can be used for logging or further processing of MarketData objects
-            LOG.info("Successfully received and parsed message from Kafka: {}", marketData);
-            return marketData;
-        }).filter(marketData -> marketData != null); // Keep the filter if you want to filter nulls
+        String duckDbPath = System.getenv().getOrDefault(
+                "WAREHOUSE_PATH", "/mnt/duckdb/warehouse.duckdb");
 
-        // Sink to DuckDB
-        String duckDbPath = "/mnt/duckdb/warehouse.duckdb"; // Path within the Flink container
-        processedStream.addSink(new DuckDBSinkFunction(duckDbPath));
+        stream.addSink(new DuckDBSinkFunction(duckDbPath)).name("duckdb-sink");
 
-        LOG.info("Executing Flink job...");
-        env.execute("Kafka Market Data Consumer with DuckDB Sink"); // Changed job name for clarity
+        env.execute("Kafka Market Data Consumer with DuckDB Sink");
     }
+
 }

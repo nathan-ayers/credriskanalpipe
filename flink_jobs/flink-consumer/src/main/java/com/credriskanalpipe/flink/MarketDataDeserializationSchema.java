@@ -1,34 +1,32 @@
 package com.credriskanalpipe.flink;
 
 import org.apache.flink.api.common.serialization.DeserializationSchema;
-import org.apache.flink.api.common.typeinfo.TypeInformation; // Required for getProducedType
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class MarketDataDeserializationSchema implements DeserializationSchema<MarketData> {
-
     private static final long serialVersionUID = 1L;
-    private transient ObjectMapper objectMapper;
+    private static final Logger LOG = LoggerFactory.getLogger(MarketDataDeserializationSchema.class);
+    private transient ObjectMapper mapper;
 
     @Override
-    public void open(DeserializationSchema.InitializationContext context) throws Exception {
-        objectMapper = new ObjectMapper();
+    public void open(InitializationContext context) {
+        mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @Override
-    public MarketData deserialize(byte[] message) throws IOException {
-        return objectMapper.readValue(message, MarketData.class);
+    public MarketData deserialize(byte[] message) {
+        if (message == null) return null;
+        String s = new String(message, StandardCharsets.UTF_8).trim();
+        if (s.isEmpty()) return null;
+        try { return mapper.readValue(s, MarketData.class); }
+        catch (Exception e) { LOG.warn("Skipping bad record: {}", s, e); return null; }
     }
 
-    // Correct implementation of isEndOfStream
-    @Override
-    public boolean isEndOfStream(MarketData nextElement) {
-        return false; // We are processing a continuous stream, so it's never ending.
-    }
-
-    // Correct implementation of getProducedType
-    @Override
-    public TypeInformation<MarketData> getProducedType() {
-        return TypeInformation.of(MarketData.class);
-    }
+    @Override public boolean isEndOfStream(MarketData nextElement) { return false; }
+    @Override public TypeInformation<MarketData> getProducedType() { return TypeInformation.of(MarketData.class); }
 }

@@ -47,7 +47,7 @@ services:
         rest.bind-port: 8081
     volumes:
       # Mount the target directory containing your Flink job JAR
-      - ./flink_jobs/flink-consumer/target:/opt/flink/usrlib
+      - ${PWD}/flink_jobs/flink-consumer/target:/opt/flink/usrlib
     depends_on:
       - broker # JobManager depends on Kafka being up
 
@@ -64,10 +64,8 @@ services:
         taskmanager.numberOfTaskSlots: 1
         taskmanager.bind-host: 0.0.0.0 # Added for explicit binding
     volumes:
-      # Mount the target directory containing your Flink job JAR
-      - ./flink_jobs/flink-consumer/target:/opt/flink/usrlib
-      # ADDED: Mount the DuckDB data volume here
-      - ./data/staging:/mnt/duckdb
+      - ${PWD}/flink_jobs/flink-consumer/target:/opt/flink/usrlib
+      - ${PWD}/data/staging:/mnt/duckdb
     depends_on:
       - jobmanager # TaskManager depends on JobManager
       - duckdb # ADDED: TaskManager now also depends on DuckDB
