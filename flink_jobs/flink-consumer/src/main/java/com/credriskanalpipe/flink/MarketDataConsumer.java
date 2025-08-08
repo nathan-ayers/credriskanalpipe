@@ -26,7 +26,7 @@ public class MarketDataConsumer {
         KafkaSource<MarketData> source = KafkaSource.<MarketData>builder()
                 .setBootstrapServers("broker:29092")               // internal Kafka listener
                 .setTopics("market_data")
-                .setGroupId("flink-market-consumer-group" + System.currentTimeMillis())
+                .setGroupId("flink-market-consumer")
                 .setStartingOffsets(OffsetsInitializer.latest())
                 .setValueOnlyDeserializer(new MarketDataDeserializationSchema())
                 .build();

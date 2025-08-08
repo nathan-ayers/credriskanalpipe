@@ -42,3 +42,4 @@ dbt/.dbt/
 
 livid.webm
 flink-consumer-1.0-SNAPSHOT.jar
+./flink_jobs/flink-consumer/target/flink-consumer-1.0-SNAPSHOT.jar
