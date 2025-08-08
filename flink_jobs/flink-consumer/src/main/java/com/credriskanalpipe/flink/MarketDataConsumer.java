@@ -1,9 +1,5 @@
 package com.credriskanalpipe.flink;
 
-import com.credriskanalpipe.flink.DuckDBSinkFunction;
-import com.credriskanalpipe.flink.MarketData;
-import com.credriskanalpipe.flink.MarketDataDeserializationSchema; // <-- NEW: Import your custom deserializer
-
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 // import org.apache.flink.api.common.serialization.SimpleStringSchema; // <-- REMOVE or comment out
 import org.apache.flink.connector.kafka.source.KafkaSource;
